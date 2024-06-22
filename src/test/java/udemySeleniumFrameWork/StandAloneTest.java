@@ -51,7 +51,7 @@ public class StandAloneTest {
 		driver.findElement(By.cssSelector(".ta-item:nth-of-type(2)")).click();// selecting second option from the list
 		driver.findElement(By.cssSelector(".action__submit")).click();
 		
-		String confirmMessage=driver.findElement(By.cssSelector(".hero-promary")).getText();
+		String confirmMessage=driver.findElement(By.cssSelector(".hero-primary")).getText();
 		Assert.assertTrue(confirmMessage.equalsIgnoreCase("THANKYOU FOR THE ORDER."));
 		driver.close();
 

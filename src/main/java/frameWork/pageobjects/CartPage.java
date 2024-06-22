@@ -30,8 +30,10 @@ public class CartPage extends AbstractClass {
 		return match;
 
 	}
-	public void clickOnCheckOut() {
+	public CheckOutPage clickOnCheckOut() {
 		checkOutButton.click();
+		return new CheckOutPage(driver);
+		
 	}
 
 }
