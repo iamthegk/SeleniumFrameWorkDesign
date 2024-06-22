@@ -13,6 +13,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
+import frameWork.pageobjects.CartPage;
 import frameWork.pageobjects.LandingPage;
 import frameWork.pageobjects.ProductCatalogue;
 
@@ -30,30 +31,29 @@ public class StandAloneTestOrg {
 		landingpage.hitUrl();
 		landingpage.login("pass123x@gmail.com", "Pass@123");
 		ProductCatalogue productcatalogue = new ProductCatalogue(driver);
-		List<WebElement>productList=productcatalogue.getProductList();
-
-		WebElement singleProduct = productList.stream()
-				.filter(product -> product.findElement(By.cssSelector("b")).getText().equals(productName)).findFirst()
-				.orElse(null);
-		singleProduct.findElement(By.cssSelector(".card-body button:last-of-type")).click();
-
-		wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#toast-container"))); // # means id
-		wait.until(ExpectedConditions.invisibilityOf(driver.findElement(By.cssSelector(".ng-animating")))); // to
-																											// improve
-																											// perfomance
-		driver.findElement(By.cssSelector("[routerlink*='cart']")).click();
-		List<WebElement> itemsInCart = driver.findElements(By.cssSelector(".cartSection h3"));
-		Boolean match = itemsInCart.stream().anyMatch(item -> item.getText().equalsIgnoreCase(productName)); // anymatch
-																												// wiil
-																												// return
-																												// Boolean
+		List<WebElement> productList = productcatalogue.getProductList();
+		productcatalogue.addProductToCart(productName);
+		CartPage cartpage=productcatalogue.goToCart(); // IMP STEP -> 
+		Boolean match = cartpage.verifyTheMatchingProduct(productName);
 		Assert.assertTrue(match);
-		driver.findElement(By.cssSelector(".subtotal button")).click();
+		
+		
+		
+		
+		cartpage.clickOnCheckOut();
+		
+		
+		
+
+
+	
+	
 		Actions action = new Actions(driver);
 		action.sendKeys(driver.findElement(By.cssSelector("[placeholder='Select Country']"))).sendKeys("india").build()
 				.perform();
-		wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".ta-results")));// wait for the country
-																									// list drop down
+		// wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".ta-results")));//
+		// wait for the country
+		// list drop down
 		driver.findElement(By.cssSelector(".ta-item:nth-of-type(2)")).click();// selecting second option from the list
 		driver.findElement(By.cssSelector(".action__submit")).click();
 

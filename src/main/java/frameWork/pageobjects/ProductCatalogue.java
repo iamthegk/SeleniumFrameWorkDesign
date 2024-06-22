@@ -21,16 +21,20 @@ public class ProductCatalogue extends AbstractClass {
 	}
 
 	// WebElement emailElement = driver.findElement(By.id("userEmail"));
-	// pagefactory
+	// pagefactory - only support driver.find constructions
 
 	@FindBy(css = ".mb-3")
 	List<WebElement> products;
-	// page factory not support
+
+	@FindBy(css = ".ng-animating")
+	WebElement animationElement;
+
 	// Page factory only for driver.findElement construction,
 	// It will not support By element, so
 
 	By productsBy = By.cssSelector(".mb-3");
 	By addToCart = By.cssSelector(".card-body button:last-of-type");
+	By waitForToast = By.cssSelector("#toast-container");
 
 	public List<WebElement> getProductList() {
 		waitForElementToVisible(productsBy);
@@ -48,7 +52,10 @@ public class ProductCatalogue extends AbstractClass {
 
 	public void addProductToCart(String productName) {
 		WebElement prod = getProductByName(productName);
-		prod.findElement(By.cssSelector(".card-body button:last-of-type")).click();
+		prod.findElement(addToCart).click();
+		waitForElementToVisible(waitForToast);
+		waitForElementToDisappear(animationElement);
+
 	}
 
 }
